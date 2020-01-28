@@ -22,7 +22,7 @@ class Guide(db.Model):
 
 class GuideSchema(ma.Schema):
     class Meta:
-        fields = ('title', 'content')
+        fields = ('title', 'content', "id")
         
 
 
@@ -70,6 +70,15 @@ def guide_update(id):
     guide.content = content
     
     db.session.commit()
+    return guide_schema.jsonify(guide)
+
+# Endpoint for deleting a record
+@app.route("/guide/<id>", methods=["DELETE"])
+def guide_delete(id):
+    guide = Guide.query.get(id)
+    db.session.delete(guide)
+    db.session.commit()
+    
     return guide_schema.jsonify(guide)
 
 
